@@ -50,12 +50,26 @@ function onContainerClick(e) {
     }
 };
 
+
 function createBasicLightbox(e) {
   const instance = basicLightbox.create(`
     <img src="${e.target.dataset.source}">
-`)
+`,
+    { onShow: (instance) => {document.addEventListener('keydown', function onEscape(event) {
+      if (event.code === 'Escape') {
+        instance.close()
+      }
+    })} },)
   
-  console.log(e.target.dataset.source);
+  // console.log(e.target.dataset.source);
   instance.show()
-   
+
+  
 }
+   
+
+    
+  
+      
+
+  
