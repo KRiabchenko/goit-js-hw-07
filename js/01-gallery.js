@@ -9,11 +9,8 @@ const picturesMarkup = createGalleryCards(galleryItems);
 
 
 galleryContainer.insertAdjacentHTML('beforeend', picturesMarkup);
-
-galleryContainer.addEventListener('click', onContainerClick);
 galleryContainer.addEventListener('click', onImgClick);
 
-galleryContainer.addEventListener('click', createBasicLightbox);
 
 function createGalleryCards() {
     return galleryItems.map(({ preview, original, description }) => {
@@ -32,40 +29,41 @@ function createGalleryCards() {
     }).join('');
 }
 
-const galleryImages = document.querySelectorAll('.gallery__image');
 
 
 function onImgClick(event) {
   event.preventDefault();
-  if (event.target.nodeName !== "IMG") {
+
+ if (event.target.nodeName !== "IMG") {
     return;
+ }
+  
+  const imgLink = event.target.dataset.source;
+  const instance = basicLightbox.create(`
+    <img src="${imgLink}">
+  `,
+    {
+      onShow: () => { window.addEventListener('keydown', onEscape) },
+      onClose: () => { window.removeEventListener('keydown', onEscape)},
+  })
+  function onEscape(evt) {
+  const ECS_KEY_CODE = 'Escape';
+  if (evt.code === ECS_KEY_CODE) {
+    instance.close()
   }
 }
-
-function onContainerClick(e) {
-  const isPictureGalleryEl = e.target.classList.contains('.gallery__image');
-  
-    if (!isPictureGalleryEl) {
-      return;
-    }
-};
-
-
-function createBasicLightbox(e) {
-  const instance = basicLightbox.create(`
-    <img src="${e.target.dataset.source}">
-`,
-    { onShow: (instance) => {document.addEventListener('keydown', function onEscape(event) {
-      if (event.code === 'Escape') {
-        instance.close()
-      }
-    })} },)
-  
-  // console.log(e.target.dataset.source);
   instance.show()
 
-  
 }
+
+ 
+
+
+
+
+ 
+
+
    
 
     
